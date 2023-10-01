@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\HariKerja;
+use App\Models\Shift;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +21,8 @@ return new class extends Migration
             $table->string('whatsapp');
             $table->enum('level', ['admin', 'user'])->default('user');
             $table->string('avatar')->nullable();
+            $table->foreignIdFor(HariKerja::class)->nullable();
+            $table->foreignIdFor(Shift::class)->nullable();
             $table->timestamps();
         });
     }

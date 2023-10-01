@@ -17,15 +17,20 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
- 
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
             $user = User::where('email', $credentials['email'])->first();
-            return redirect()->intended('/')->with('success', 'Berhasil login');
-        }
 
-        return redirect()->route('login')->with('failed', 'Email atau password anda salah');
+            if ($user->level == 'admin') {
+                return redirect()->route('dashboard')->with('success', 'Berhasil login');
+            } else {
+                return redirect()->route('user.absensi')->with('success', 'Berhasil login');
+            }
+            
+        }
+        return redirect()->route('login')->with('error', 'Email atau password anda salah');
     }
     
     function register() {
@@ -54,7 +59,6 @@ class AuthController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('success', 'Berhasil logout');

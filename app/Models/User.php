@@ -23,7 +23,9 @@ class User extends Authenticatable
         'password',
         'whatsapp',
         'level', 
-        'avatar'
+        'avatar',
+        'hariKerja_id',
+        'shift_id'
     ];
 
     /**
@@ -44,4 +46,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function hariKerjas()
+    {
+        return $this->belongsTo(HariKerja::class, 'hariKerja_id', 'id');
+    }
+
+    public function shifts()
+    {
+        return $this->belongsTo(Shift::class, 'shift_id', 'id');
+    }
+
+    public function absensis()
+    {
+        return $this->hasMany(Absensi::class, 'user_id', 'id');
+    }
 }

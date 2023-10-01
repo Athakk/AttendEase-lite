@@ -156,7 +156,7 @@
                   </g>
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+              <span class="demo menu-text fs-3 fw-bolder ms-2">AttendEase</span>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -166,71 +166,65 @@
 
           <div class="menu-inner-shadow"></div>
 
-          <ul class="menu-inner py-1">
-            <!-- Dashboard -->
+          <ul class="menu-inner py-1 {{ Auth::user()->level == 'admin' ? '' : 'd-none' }}">
             <li class="menu-item {{ Route::current()->getName() == 'dashboard' ? 'active' : '' }}">
               <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div>Dashboard</div>
               </a>
             </li>
+            <li class="menu-item {{ Route::current()->getName() == 'admin.absensi' ? 'active' : '' }}">
+              <a href="{{ route('admin.absensi') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-group"></i>
+                <div>Absensi</div>
+              </a>
+            </li>
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Laporan</span></li>
+            <li class="menu-item {{ Route::current()->getName() == 'laporan.index' ? 'active' : '' }}">
+              <a href="{{ route('laporan.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-copy-alt"></i>
+                <div>Laporan Absensi</div>
+              </a>
+            </li>
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
-            <li class="menu-item {{ Route::current()->getName() == 'user' ? 'active' : '' }}">
-              <a href="{{ route('user.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div>User</div>
-              </a>
-            </li>
-            {{-- 
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Inventory</span>
-            </li>
-            <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'barang' ? 'active' : '' }}">
-              <a href="{{ route('barang.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-book-content"></i>
-                <div data-i18n="Analytics">Barang</div>
-              </a>
-            </li>
-            <li class="menu-item">
+            <li class="menu-item {{ Auth::user()->level !== 'admin' ? 'd-none' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-package"></i>
-                <div data-i18n="Account Settings">Stok</div>
+                <i class="menu-icon tf-icons bx bx-calendar"></i>
+                <div data-i18n="Pola Kerja">Pola Kerja</div>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'stok-masuk' ? 'active' : '' }}">
-                  <a href="{{ route('stok-masuk.index') }}" class="menu-link">
-                    <div data-i18n="Account">Stok Masuk</div>
+                <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'hariKerja' ? 'active' : '' }}">
+                  <a href="{{ route('hariKerja.index') }}" class="menu-link">
+                    <div data-i18n="Hari Kerja">Hari Kerja</div>
                   </a>
                 </li>
-                <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'stok-keluar' ? 'active' : '' }}">
-                  <a href="{{ route('stok-keluar.index') }}" class="menu-link">
-                    <div data-i18n="Notifications">Stok Keluar</div>
+                <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'shift' ? 'active' : '' }}">
+                  <a href="{{ route('shift.index') }}" class="menu-link">
+                    <div data-i18n="Shift">Shift</div>
                   </a>
                 </li>
               </ul>
             </li>
-            <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'kategori' ? 'active' : '' }}">
-              <a href="{{ route('kategori.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-book-bookmark"></i>
-                <div data-i18n="Analytics">Kategori</div>
-              </a>
-            </li>
-            <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'satuan' ? 'active' : '' }}">
-              <a href="{{ route('satuan.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-book"></i>
-                <div data-i18n="Analytics">Satuan</div>
-              </a>
-            </li>
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Master</span>
-            </li>
-            <li class="menu-item {{ explode('.', Route::current()->getName())[0] == 'user' ? 'active' : '' }}">
+            <li class="menu-item {{ Route::current()->getName() == 'user' ? 'active' : '' }}">
               <a href="{{ route('user.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Analytics">User</div>
+                <div data-i18n="User">User</div>
               </a>
-            </li> --}}
-
+            </li>
+          </ul>
+          <ul class="menu-inner py-1 {{ Auth::user()->level == 'user' ? '' : 'd-none' }}">
+            <li class="menu-item {{ Route::current()->getName() == 'user.absensi' ? 'active' : '' }}">
+              <a href="{{ route('user.absensi') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-calendar-check"></i>
+                <div>Absensi</div>
+              </a>
+            </li>
+            <li class="menu-item {{ Route::current()->getName() == 'hariKerjaShift.index' ? 'active' : '' }}">
+              <a href="{{ route('hariKerjaShift.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-clipboard"></i>
+                <div>Hari Kerja & shift</div>
+              </a>
+            </li>
           </ul>
         </aside>
         <!-- / Menu -->
@@ -290,6 +284,12 @@
                       <a class="dropdown-item" href="{{ route('myprofile.index', Auth::user()) }}">
                         <i class="bx bx-user me-2"></i>
                         <span class="align-middle">My Profile</span>
+                      </a>
+                    </li>
+                    <li class="{{ Auth::user()->level == 'admin' ? 'd-none' : '' }}">
+                      <a class="dropdown-item" href="{{ route('hariKerjaShift.index') }}">
+                        <i class="bx bx-network-chart me-2"></i>
+                        <span class="align-middle">Pilih Pola Kerja</span>
                       </a>
                     </li>
                     <li>
@@ -355,6 +355,12 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
+    {{-- Toastr --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
     <!-- Clock -->
     <script>
         function updateClock() {
@@ -379,25 +385,22 @@
 
         // Update clock every second
         setInterval(updateClock, 1000);
-    </script>
 
-    <script>
+        // DataTable
         $(document).ready(function() {
             $('#myTable').DataTable();
+            $('#hariKerjaTable').DataTable();
+            $('#shiftTable').DataTable();
         });
-    </script>
 
-    {{-- Toastr --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script>
+        //Toastr
         @if (Session::has('success'))
             toastr.success('{{ Session::get('success') }}');
         @elseif (Session::has('error'))
             toastr.error('{{ Session::get('error') }}');
         @endif
     </script>
+
+
   </body>
 </html>

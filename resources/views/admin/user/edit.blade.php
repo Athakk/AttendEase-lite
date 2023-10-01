@@ -74,8 +74,8 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="level" class="form-label">Level</label>
-                                        <select id="level" name="level" class="form-select" fdprocessedid="2tnrtb"
-                                            placeholder="Pilih Level">
+                                        <select id="level" name="level" class="form-select select2"
+                                            fdprocessedid="2tnrtb" placeholder="Pilih Level">
                                             <option disabled selected value="">Pilih Level</option>
                                             <option value="user" {{ $user->level == 'user' ? 'selected' : '' }}>User
                                             </option>
@@ -100,5 +100,6 @@
 
     <script>
         $('.dropify').dropify();
+        $('.select2').select2();
     </script>
 @endsection

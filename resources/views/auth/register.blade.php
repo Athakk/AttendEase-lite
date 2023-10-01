@@ -124,7 +124,7 @@
                       </g>
                     </svg>
                   </span>
-                  <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+                  <span class=" demo text-body fs-2 fw-bolder">AttendEase</span>
                 </a>
               </div>
               <!-- /Logo -->
@@ -145,7 +145,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
-                  <input type="text" class="form-control" id="email" name="email" placeholder="Masukkan email anda" required/>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email anda" required/>
                 </div>
                 <div class="mb-3">
                   <label for="whatsapp" class="form-label">whatsapp</label>

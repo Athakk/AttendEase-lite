@@ -39,7 +39,7 @@ class UserController extends Controller
 
         User::create($request->all());
         
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambah!');;
+        return redirect()->route('user.index')->with('success', 'User berhasil ditambah!');
     }
     
     function show() {

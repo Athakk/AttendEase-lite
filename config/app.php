@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Jakarta',
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +168,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        //DomPDF
+        Barryvdh\DomPDF\ServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -182,6 +185,9 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        //DomPDF
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

@@ -16,16 +16,25 @@ class AbsensiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexAdmin(Request $request)
+    public function indexAdmin()
     {
         $user = User::where('level', 'user')->get();
-
+        
+        
+        return view('admin.absensi.index', compact('user'));
+    }
+    
+    public function getByDate(Request $request) {
+        $user = User::where(['level' => 'user'])->get();
+        $tanggal = $request->date;
+        
         $user->map(function($q) use ($request) {
-            $q->absensi = Absensi::where(['user_id' => $q->id ,'tanggal' => date('Y-m-d')])->first() ?? collect([]);
+            $q->absensi = Absensi::where(['user_id' => $q->id ,'tanggal' => $request->date])->first() ?? collect([]);
         });
 
+        // dd($user);
 
-        return view('admin.absensi.index', compact('user'));
+        return view('admin.absensi.table', compact('user', 'tanggal'));
         
     }
     

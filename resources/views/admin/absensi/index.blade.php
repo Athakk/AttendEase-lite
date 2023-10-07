@@ -7,9 +7,8 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="fw-bold m-0">Absensi</h4>
-                <form action="">
-                    <input class="form-control" type="date" value="{{ date('Y-m-d') }}" id="html5-date-input" />
-                </form>
+                <input class="form-control w-25" onchange="getByDate(this)" type="date" value="{{ date('Y-m-d') }}"
+                    id="date" />
             </div>
             <hr class="m-0 " />
             <div class="card-body">
@@ -30,14 +29,15 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ isset($item->absensi->tanggal) ? $item->absensi->tanggal : date('Y-m-d') }}</td>
-                                    <td>{{ isset($item->absensi->jam_masuk) ? $item->absensi->jam_masuk : '-' }}</td>
-                                    <td>{{ isset($item->absensi->jam_keluar) ? $item->absensi->jam_keluar : '-' }}</td>
+                                    <td>{{ isset($item->absensis->tanggal) ? $item->absensis->tanggal : date('Y-m-d') }}
+                                    </td>
+                                    <td>{{ isset($item->absensis->jam_masuk) ? $item->absensis->jam_masuk : '-' }}</td>
+                                    <td>{{ isset($item->absensis->jam_keluar) ? $item->absensis->jam_keluar : '-' }}</td>
                                     <td>
-                                        @if (isset($item->absensi->tanggal))
+                                        @if (isset($item->absensis->tanggal))
                                             <span class="badge bg-label-primary">Sudah Absen</span>
                                         @else
-                                            <span class="badge bg-label-danger">Balum/Tidak Absen</span>
+                                            <span class="badge bg-label-danger">Belum/Tidak Absen</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -48,4 +48,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function getByDate(athak) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "post",
+                url: "/admin/absensi/getByDate",
+                data: {
+                    'date': athak.value
+                },
+                success: function(response) {
+                    $('#myTable').html(response);
+                }
+            });
+        }
+    </script>
 @endsection

@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function() {
 
             Route::controller(AbsensiController::class)->group(function () {
                 Route::get('/absensi', 'indexAdmin')->name('admin.absensi');    
+                Route::post('/absensi/getByDate', 'getByDate')->name('admin.absensi.getByDate');    
             });
 
             Route::controller(LaporanController::class)->group(function () {

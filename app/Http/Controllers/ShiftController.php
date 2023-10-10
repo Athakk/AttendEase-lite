@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Absensi;
 use App\Models\Shift;
+use App\Models\ShiftDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -97,7 +98,14 @@ class ShiftController extends Controller
      */
     public function destroy(Shift $shift)
     {
+        $user = User::where('shift_id', $shift->id)->first();
+        if ($user !== null) {   
+            return response()->json(['status' => 'error', 'message' => 'Shift gagal dihapus!']);
+        }
+
+        $shiftDetail = ShiftDetail::where('shift_id', $shift->id)->pluck('id');
+        ShiftDetail::destroy($shiftDetail);
         Shift::destroy($shift->id);
-        return response()->json(['status' => 'Shift berhasil dihapus!']);
+        return response()->json(['status' => 'success', 'message' => 'Shift berhasil dihapus!']);
     }
 }

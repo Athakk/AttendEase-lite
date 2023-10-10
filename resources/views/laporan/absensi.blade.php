@@ -85,7 +85,7 @@
                         <td class="text-center bold">
                             @if ($absensis[$key][$i]['status'] !== null)
                                 .
-                            @else
+                            @elseif ($absensis[$key][$i]['status'] == null && $absensis[$key][$i]['tanggal'] < date('Y-m-d'))
                                 A
                             @endif
                         </td>

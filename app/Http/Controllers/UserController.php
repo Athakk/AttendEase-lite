@@ -81,10 +81,11 @@ class UserController extends Controller
 
     function destroy(User $user) {
         if (Auth::user()->id == $user->id) {
-            return redirect()->route('user.index')->with('error', 'Tidak bisa menghapus user!');
+            return response()->json(['status' => 'error', 'message' => 'User gagal dihapus!']);
         }
+
         File::delete('storage/user/'. $user->avatar);
         User::destroy($user->id);
-        return response()->json(['status' => 'User berhasil dihapus!']);
+        return response()->json(['status' => 'success', 'message' => 'User berhasil dihapus!']);
     }
 }

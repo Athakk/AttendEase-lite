@@ -24,9 +24,9 @@ class AuthController extends Controller
             $user = User::where('email', $credentials['email'])->first();
 
             if ($user->level == 'admin') {
-                return redirect()->route('dashboard')->with('success', 'Berhasil login');
+                return redirect()->intended(route('dashboard'))->with('success', 'Berhasil login');
             } else {
-                return redirect()->route('user.absensi')->with('success', 'Berhasil login');
+                return redirect()->intended(route('user.absensi'))->with('success', 'Berhasil login');
             }
             
         }

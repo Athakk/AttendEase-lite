@@ -3,6 +3,7 @@
 @section('title', 'Laporan Absensi')
 
 @section('content')
+
     <div class="col-xxl">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">

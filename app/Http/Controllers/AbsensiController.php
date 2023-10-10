@@ -32,8 +32,6 @@ class AbsensiController extends Controller
             $q->absensi = Absensi::where(['user_id' => $q->id ,'tanggal' => $request->date])->first() ?? collect([]);
         });
 
-        // dd($user);
-
         return view('admin.absensi.table', compact('user', 'tanggal'));
         
     }
@@ -42,8 +40,80 @@ class AbsensiController extends Controller
     {
         $absensi = Absensi::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
         $absensiNow = Absensi::where(['tanggal' => date('Y-m-d'), 'user_id' => Auth::user()->id])->first();
+        //cek absensi
+
+        $bulans = [
+            'January' => 'Januari',
+            'February' => 'Februari',
+            'March' => 'Maret',
+            'April' => 'April',
+            'May' => 'Mei',
+            'June' => 'Juni',
+            'July' => 'Juli',
+            'August' => 'Agustus',
+            'September' => 'September',
+            'October' => 'Oktober',
+            'November' => 'November',
+            'Desember' => 'Desember',
+        ];
+        $bulanNow = $bulans[date('F')];
+        //cek bulan
         
-        return view('user.absensi.index', compact('absensi', 'absensiNow'));
+        $totalHariNow = cal_days_in_month(CAL_GREGORIAN, date('m'), date("Y"));
+        $totalHadir = 0;
+        $totalAbsen = 0;
+
+        for ($i=1; $i <= $totalHariNow ; $i++) { 
+            $tanggal = date("Y-m") . '-' . sprintf('%02d', $i);
+            $userAbsensi = Absensi::whereDate('tanggal', $tanggal)->where('user_id', 2)->first();
+
+            $absensis[$i] = [
+                'tanggal' => $tanggal,
+                'status' => $userAbsensi == null ? 'absen' : 'hadir',
+            ];
+
+            if ($absensis[$i]['status'] == 'absen' && $absensis[$i]['tanggal'] < date('Y-m-d')) {
+                $totalAbsen ++;
+            } elseif ($absensis[$i]['status'] == 'hadir') {
+                $totalHadir ++;
+            }
+        }
+
+        //cek total absen
+
+        $chartHadir = [];
+        $chartAbsen = [];
+        $month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+        foreach ($month as $key => $value) {
+            $totalHari = cal_days_in_month(CAL_GREGORIAN, $value, date("Y"));
+
+            $totalHadirChart = 0;
+            $totalAbsenChart = 0;
+
+            for ($i=1; $i <= $totalHari ; $i++) { 
+                $tanggal = date("Y") . '-' . sprintf('%02d', $value) . '-' . sprintf('%02d', $i);
+                $userAbsensi = Absensi::whereDate('tanggal', $tanggal)->where('user_id', 2)->first();
+    
+                $absensis[$i] = [
+                    'tanggal' => $tanggal,
+                    'status' => $userAbsensi == null ? 'absen' : 'hadir',
+                ];
+    
+                if ($absensis[$i]['status'] == 'absen' && $absensis[$i]['tanggal'] < date('Y-m-d')) {
+                    $totalAbsenChart ++;
+                } elseif ($absensis[$i]['status'] == 'hadir') {
+                    $totalHadirChart ++;
+                }
+
+                if ($i == $totalHari) {
+                    array_push($chartHadir, $totalHadirChart);
+                    array_push($chartAbsen, $totalAbsenChart);
+                }
+            }    
+        }
+
+        return view('user.absensi.index', compact('absensi', 'absensiNow', 'bulanNow', 'totalHadir', 'totalAbsen', 'chartHadir', 'chartAbsen'));
     }
 
     public function indexHariKerjaShift()
@@ -52,7 +122,7 @@ class AbsensiController extends Controller
         $shift = Shift::get();
         return view('user.hariKerjaShift', compact('hariKerja', 'shift'));
     }
-
+    
     public function absenMasuk() {
         $user = Auth::user();        
         if($user->hari_kerja_id == null){
@@ -74,11 +144,10 @@ class AbsensiController extends Controller
             'Sunday' => 'minggu'
         ];
         $hariKerja = HariKerja::where(['id' => $user->hari_kerja_id, $hari[Date('l')] => '1' ])->first();
-
         if ($hariKerja == null) {
             return redirect()->back()->with('error', 'Absensi hanya bisa dilakukan pada hari kerja!');
         }
-
+        
         $absensi = Absensi::where(['tanggal' => date('Y-m-d'), 'user_id' => $user->id])->first();
         if (isset($absensi)) {
             return redirect()->back()->with('error', 'Anda sudah melakukan absen masuk hari ini');
@@ -86,6 +155,10 @@ class AbsensiController extends Controller
         
         
         $shift = Shift::where(['id' => $user->shift_id])->with('shiftDetails')->first();
+        if ($shift == null) {
+            return redirect()->back()->with('error', 'Shift yang anda pilih tidak ditemukan!');
+        }
+
         $shiftToday = $shift->shiftDetails[date('N')-1];
         
         if (date('h:i:s') > $this->toTime($this->toDetik($shiftToday->jam_masuk) + $this->toDetik($shiftToday->dispensasi))) {
@@ -106,6 +179,10 @@ class AbsensiController extends Controller
         $absensi = Absensi::where(['tanggal' => date('Y-m-d'), 'user_id' => $user->id])->first();
 
         $shift = Shift::where(['id' => $user->shift_id])->with('shiftDetails')->first();
+        if ($shift == null) {
+            return redirect()->back()->with('error', 'Shift yang anda pilih tidak ditemukan!');
+        }
+        
         $shiftToday = $shift->shiftDetails[date('N')-1];
         
         if (date('h:i:s') < $this->toTime($this->toDetik($shiftToday->jam_masuk) + $this->toDetik($shiftToday->dispensasi))) {

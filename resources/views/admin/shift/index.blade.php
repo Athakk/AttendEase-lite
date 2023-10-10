@@ -164,12 +164,21 @@
                                     "_token": "{{ csrf_token() }}",
                                 },
                                 success: function(response) {
-                                    swal(response.status, {
-                                            icon: "success",
-                                        })
-                                        .then((result) => {
-                                            location.reload();
-                                        });
+                                    if (response.status == 'success') {
+                                        swal(response.message, {
+                                                icon: "success",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    } else {
+                                        swal(response.message, {
+                                                icon: "error",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    }
                                 }
                             });
                         }

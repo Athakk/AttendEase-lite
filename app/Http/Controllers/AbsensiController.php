@@ -161,13 +161,13 @@ class AbsensiController extends Controller
 
         $shiftToday = $shift->shiftDetails[date('N')-1];
         
-        if (date('h:i:s') > $this->toTime($this->toDetik($shiftToday->jam_masuk) + $this->toDetik($shiftToday->dispensasi))) {
+        if (date('H:i:s') > $this->toTime($this->toDetik($shiftToday->jam_masuk) + $this->toDetik($shiftToday->dispensasi))) {
             return redirect()->back()->with('error', 'Anda sudah melebihi batas waktu absensi! Silahkan hubungi admin');
         }
         
         Absensi::create([
             'tanggal' => date('Y-m-d'),
-            'jam_masuk' => date('h:i:s'),
+            'jam_masuk' => date('H:i:s'),
             'user_id' => $user->id
         ]);
 
@@ -185,11 +185,13 @@ class AbsensiController extends Controller
         
         $shiftToday = $shift->shiftDetails[date('N')-1];
         
-        if (date('h:i:s') < $this->toTime($this->toDetik($shiftToday->jam_masuk) + $this->toDetik($shiftToday->dispensasi))) {
+        if (date('H:i:s') <= $this->toTime($this->toDetik($shiftToday->jam_keluar) - $this->toDetik($shiftToday->dispensasi))) {
             return redirect()->back()->with('error', 'Belum waktunya untuk absen keluar!');
         }
 
-        $absensi->jam_keluar = date('h:i:s');
+        // dd($this->toTime($this->toDetik($shiftToday->jam_keluar) + $this->toDetik($shiftToday->dispensasi)));
+
+        $absensi->jam_keluar = date('H:i:s');
         $absensi->update();
     }
 
